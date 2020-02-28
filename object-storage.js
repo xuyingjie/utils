@@ -4,7 +4,7 @@ import { hmacSha1 } from './hmac'
  * https://fetch.spec.whatwg.org/#forbidden-header-name
  * md5 lib: https://github.com/emn178/js-md5
  */
-export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', cacheControl, accessKeyId, accessKeySecret }) {
+export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', accessKeyId, accessKeySecret }) {
     const date = new Date().toUTCString()
 
     const signContent = [
@@ -22,13 +22,12 @@ export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', c
         'x-oss-date': date,
         'Content-MD5': contentMD5,
         'Content-Type': contentType,
-        'Cache-Control': cacheControl,
         'Authorization': `OSS ${accessKeyId}:${signature}`
     }
     return headers
 }
 
-export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', cacheControl, accessKeyId, accessKeySecret }) {
+export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', accessKeyId, accessKeySecret }) {
     const date = new Date().toUTCString()
 
     const signContent = [
@@ -46,7 +45,6 @@ export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', c
         'x-obs-date': date,
         'Content-MD5': contentMD5,
         'Content-Type': contentType,
-        'Cache-Control': cacheControl,
         'Authorization': `OBS ${accessKeyId}:${signature}`
     }
     return headers

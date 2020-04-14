@@ -4,7 +4,7 @@ import { hmacSha1 } from './hmac'
  * https://fetch.spec.whatwg.org/#forbidden-header-name
  * md5 lib: https://github.com/emn178/js-md5
  */
-export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', accessKeyId, accessKeySecret }) {
+export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }) {
     const date = new Date().toUTCString()
 
     const signContent = [
@@ -13,6 +13,7 @@ export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', c
         contentType,
         date,
         `x-oss-date:${date}`,
+        `x-oss-object-acl:${acl}`,
         `/${bucket}/${key}`
     ].join('\n')
     const signature = await hmacSha1(accessKeySecret, signContent, 'base64')
@@ -20,6 +21,7 @@ export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', c
     const headers = {
         // 'Date': date, //Date is A forbidden header name
         'x-oss-date': date,
+        'x-oss-object-acl': acl,
         'Content-MD5': contentMD5,
         'Content-Type': contentType,
         'Authorization': `OSS ${accessKeyId}:${signature}`
@@ -27,7 +29,7 @@ export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', c
     return headers
 }
 
-export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', accessKeyId, accessKeySecret }) {
+export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }) {
     const date = new Date().toUTCString()
 
     const signContent = [
@@ -35,6 +37,7 @@ export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', c
         contentMD5,
         contentType,
         '',
+        `x-obs-acl:${acl}`,
         `x-obs-date:${date}`,
         `/${bucket}/${key}`
     ].join('\n')
@@ -42,6 +45,7 @@ export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', c
 
     const headers = {
         // 'Date': date, //Date is A forbidden header name
+        'x-obs-acl': acl,
         'x-obs-date': date,
         'Content-MD5': contentMD5,
         'Content-Type': contentType,

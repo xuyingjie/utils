@@ -1,13 +1,15 @@
 
 import { stringToArrayBuffer, arrayBufferToBase64, arrayBufferToHex } from './arrayBuffer'
 
+type FormatType = 'base64' | 'hex'
+
 /**
  * hmacSha1
  * @param {string} key 
  * @param {string} str 
  * @param {string} format base64 hex
  */
-export async function hmacSha1(key, str, format) {
+export async function hmacSha1(key: string, str: string, format: FormatType) {
     const algorithm = { name: 'hmac', hash: { name: 'sha-1' } }
 
     const rawKey = stringToArrayBuffer(key)

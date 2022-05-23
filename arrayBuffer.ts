@@ -1,7 +1,7 @@
 
 // concat arrayBuffer
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray/set
-export function concat(a, b) {
+export function concat(a: ArrayBuffer, b: ArrayBuffer) {
     const out = new Uint8Array(a.byteLength + b.byteLength)
     out.set(new Uint8Array(a))
     out.set(new Uint8Array(b), a.byteLength)
@@ -14,14 +14,14 @@ export function concat(a, b) {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder
 const encoder = new TextEncoder()
-export function stringToArrayBuffer(str) {
+export function stringToArrayBuffer(str: string) {
     const uint8 = encoder.encode(str)
     return uint8.buffer
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder
 const decoder = new TextDecoder()
-export function arrayBufferToString(buf) {
+export function arrayBufferToString(buf: ArrayBuffer) {
     return decoder.decode(buf)
 }
 
@@ -30,14 +30,14 @@ export function arrayBufferToString(buf) {
  */
 
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa
-export function base64ToArrayBuffer(base64) {
+export function base64ToArrayBuffer(base64: string) {
     const latin = atob(base64)
     // utf16 <==> latin1
     return Uint8Array.from(latin, c => c.charCodeAt(0))
 }
 
-export function arrayBufferToBase64(buf) {
-    const latin = String.fromCharCode.apply(null, new Uint8Array(buf))
+export function arrayBufferToBase64(buf: ArrayBuffer) {
+    const latin = String.fromCharCode.apply(null, [...new Uint8Array(buf)])
     return btoa(latin)
 }
 
@@ -45,6 +45,6 @@ export function arrayBufferToBase64(buf) {
  * ArrayBuffer <==> Hex
  */
 
-export function arrayBufferToHex(buf) {
+export function arrayBufferToHex(buf: ArrayBuffer) {
     return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('')
 }

@@ -12,7 +12,7 @@ const algorithm = 'AES-GCM'
  * @param {string} passwd 
  * @param {arrayBuffer} data 
  */
-export async function encrypt(passwd, data) {
+export async function encrypt(passwd: string, data: ArrayBuffer) {
     const key = await importKey(passwd)
 
     // https://developer.mozilla.org/en-US/docs/Web/API/AesGcmParams
@@ -44,7 +44,7 @@ export async function encrypt(passwd, data) {
  * @param {arrayBuffer} iv 
  * @param {arrayBuffer} data 
  */
-export async function decrypt(passwd, iv, data) {
+export async function decrypt(passwd: string, iv: ArrayBuffer, data: ArrayBuffer) {
     const key = await importKey(passwd)
     const decrypted = await window.crypto.subtle.decrypt(
         {
@@ -58,7 +58,7 @@ export async function decrypt(passwd, iv, data) {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey
-async function importKey(passwd) {
+async function importKey(passwd: string) {
     // This must be one of: 128, 192, or 256
     const rawKey = stringToArrayBuffer(passwd)
     return await window.crypto.subtle.importKey(

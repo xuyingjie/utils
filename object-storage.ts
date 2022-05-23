@@ -1,10 +1,24 @@
 import { hmacSha1 } from './hmac'
 
+interface Params {
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    bucket: string,
+    key: string,
+    contentMD5?: string,
+    /**
+     * 'text/html; charset=UTF-8' | 'application/octet-stream'
+     */
+    contentType?: string,
+    acl?: 'private' | 'public-read' | 'public-read-write',
+    accessKeyId: string,
+    accessKeySecret: string,
+}
+
 /**
  * https://fetch.spec.whatwg.org/#forbidden-header-name
  * md5 lib: https://github.com/emn178/js-md5
  */
-export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }) {
+export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }: Params) {
     const date = new Date().toUTCString()
 
     const signContent = [
@@ -29,7 +43,7 @@ export async function createOSSAuthHeaders({ method = 'GET', bucket, key = '', c
     return headers
 }
 
-export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }) {
+export async function createOBSAuthHeaders({ method = 'GET', bucket, key = '', contentMD5 = '', contentType = 'application/octet-stream', acl = 'private', accessKeyId, accessKeySecret }: Params) {
     const date = new Date().toUTCString()
 
     const signContent = [

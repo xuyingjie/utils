@@ -1,9 +1,18 @@
+interface AjaxParams {
+    url: string,
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    headers?: any,
+    body?: Document | XMLHttpRequestBodyInit | null | undefined,
+    responseType?: XMLHttpRequestResponseType,
+    onprogress?: (this: XMLHttpRequest, ev: ProgressEvent<EventTarget>) => any,
+}
+
 /**
  * ajax
  * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  * https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/getReader
  */
-export function ajax({ url, method = 'GET', headers = {}, body = null, responseType = 'arraybuffer', onprogress }) {
+export function ajax({ url, method = 'GET', headers = {}, body = null, responseType = 'arraybuffer', onprogress }: AjaxParams) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open(method, url)
